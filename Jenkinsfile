@@ -4,7 +4,7 @@ pipeline {
     stage('Build image') {
       agent {label "MKVision"}
       steps{
-          sh "docker built -t react-app ."
+          sh "docker build -t react-app ."
         }
     }
     stage('Pushing Image') {
