@@ -2,13 +2,13 @@ pipeline {
   agent none
   stages {
     stage('Build image') {
-      agent {label "windown 20 dev"}
+      agent {label "window_20_dev"}
       steps{
           sh "docker build -t react-app ."
         }
     }
     stage('Pushing Image') {
-      agent {label "windown 20 dev"}
+      agent {label "window_20_dev"}
       steps{
           sh "docker push nddung2102/react-app "
         }
