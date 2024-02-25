@@ -1,17 +1,14 @@
 pipeline {
   agent none
   stages {
-    stage('Build image') {
+    stage('Build/push image') {
       agent {label "window_20_dev"}
       steps{
+        withDockerRegistry(credentialsId: 'dockerhub') {
           bat "docker build -t react-app ."
-        }
-    }
-    stage('Pushing Image') {
-      agent {label "window_20_dev"}
-      steps{
           bat "docker push nddung2102/react-app "
         }
+      }
     }
     stage('Deploying React.js container to Kubernetes') {
       agent {label "APS"}
