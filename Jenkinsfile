@@ -13,8 +13,8 @@ pipeline {
     stage('Deploying React.js container to Kubernetes') {
       agent {label "APS"}
       steps {
-          sh "kubectl apply -f deployment.yml"
-          sh "kubectl apply -f service.yml"
+          kubernetesDeploy(configs: "deployment.yaml", 
+                                         "service.yaml")
         }
       }
   }
