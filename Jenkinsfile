@@ -4,7 +4,7 @@ pipeline {
     stage('Build/push image') {
       agent {label "window_20_dev"}
       steps{
-        withDockerRegistry(credentialsId: 'dockerhub') {
+        withDockerRegistry(credentialsId: 'dockerhub', url: "") {
           bat "docker build -t react-app ."
           bat "docker push nddung2102/react-app "
         }
