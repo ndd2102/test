@@ -25,11 +25,7 @@ kind: Ingress
 metadata:
   name: react-app
   annotations:
-    nginx.ingress.kubernetes.io/keep-alive: "300"
-    nginx.ingress.kubernetes.io/keepalive-timeout: "300"
-    nginx.ingress.kubernetes.io/proxy-connect-timeout: 3600s
-    nginx.ingress.kubernetes.io/proxy-read-timeout: 3600s
-    nginx.ingress.kubernetes.io/proxy-send-timeout: 3600s
+    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   ingressClassName: nginx
   rules:
