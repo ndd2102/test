@@ -29,7 +29,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: dlab.cmc-u.edu.vn
+    - host: test.xfactory.vn
       http:
         paths:
         - path: /
