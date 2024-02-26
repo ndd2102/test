@@ -5,8 +5,8 @@ pipeline {
       agent {label "window_20_dev"}
       steps{
         withDockerRegistry(credentialsId: 'dockerhub', url: "") {
-          bat "docker build -t nddung2102/react-app ."
-          bat "docker push nddung2102/react-app "
+          bat "docker build -t nddung2102-1/react-app ."
+          bat "docker push nddung2102-1/react-app "
         }
       }
     }

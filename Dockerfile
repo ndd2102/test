@@ -1,10 +1,12 @@
-FROM node:19-alpine3.16
+FROM node:19-alpine3.16 AS build
 WORKDIR /app
-COPY package.json .
-COPY package-lock.json .
-RUN npm i
+COPY package*.json ./
+RUN npm install
 COPY . .
-#Expose the React.js application container on port 3000
-EXPOSE 3000
-#The command to start the React.js application container
-CMD ["npm", "start"]
+RUN npm run build
+
+FROM nginx:1.25.1-alpine-slim
+RUN rm /etc/nginx/conf.d/default.conf
+COPY --from=build /app/build /usr/share/nginx/html
+COPY --from=build /app/nginx.conf  /etc/nginx/conf.d/default.conf
+CMD ["nginx", "-g", "daemon off;"]

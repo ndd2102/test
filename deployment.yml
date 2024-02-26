@@ -1,41 +1,40 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: react-app
+  name: react-app-1
   labels:
-    app: react-app
+    app: react-app-1
 spec:
   replicas: 2 
   selector:
     matchLabels:
-      app: react-app
+      app: react-app-1
   template:
     metadata:
       labels:
-        app: react-app 
+        app: react-app-1 
     spec:
       containers:
-      - name: react-app
+      - name: react-app-1
         image: nddung2102/react-app:latest 
         ports:
-        - containerPort: 3000
+        - containerPort: 80
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: react-app
+  name: react-app-1
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   ingressClassName: nginx
   rules:
-    - host: test.xfactory.vn
-      http:
-        paths:
-        - path: /
-          pathType: Prefix
-          backend:
-            service:
-              name: react-app
-              port:
-                number: 3000
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: service-1
+            port:
+              number: 80
