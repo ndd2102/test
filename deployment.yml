@@ -19,3 +19,26 @@ spec:
         image: nddung2102/react-app:latest 
         ports:
         - containerPort: 3000
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: react-app
+  annotations:
+    nginx.ingress.kubernetes.io/keep-alive: "300"
+    nginx.ingress.kubernetes.io/keepalive-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: 3600s
+    nginx.ingress.kubernetes.io/proxy-read-timeout: 3600s
+    nginx.ingress.kubernetes.io/proxy-send-timeout: 3600s
+spec:
+  ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: react-app
+            port:
+              number: 80
