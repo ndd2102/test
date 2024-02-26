@@ -29,12 +29,13 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: react-app
-            port:
-              number: 3000
+    - host: dlab.cmc-u.edu.vn
+      http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: react-app
+              port:
+                number: 3000
