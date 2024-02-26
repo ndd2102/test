@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: react-app-1
-        image: nddung2102/react-app:latest 
+        image: nddung2102/react-app-1:latest 
         ports:
         - containerPort: 80
 ---
