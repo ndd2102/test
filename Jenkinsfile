@@ -1,43 +1,51 @@
 pipeline {
   agent none
   stages {
-    stage('SonarQube Analysis') {
+    stage('Build and scan') {
       agent {label "window_20_dev"}
-      steps{
-        def scannerHome = tool 'SonarScanner';
-        withSonarQubeEnv() {
-          bat "${scannerHome}/bin/sonar-scanner"
+      stages{
+        stage ('SonarQube Analysis') {
+          steps {
+            script {
+              def scannerHome = tool 'SonarScanner';
+            }
+            withSonarQubeEnv() {
+              bat "${scannerHome}/bin/sonar-scanner"
+            }
+          }
+        }
+        stage("Quality Gate") {
+          steps{
+            script {
+              def qg = waitForQualityGate()
+            }
+            timeout(time: 1, unit: 'HOURS') {
+              if (qg.status != 'OK') {
+                error "Pipeline aborted due to quality gate failure: ${qg.status}"
+              }
+            }
+          }
+        }         
+        stage('Build image') {
+          steps{
+            bat "docker build -t nddung2102/react-app ."
+          }
+        }
+        stage('Push and scan image') {
+          steps{
+            withDockerRegistry(credentialsId: 'dockerhub', url: "") {
+              bat "docker push nddung2102/react-app "
+            }
           }
         }
       }
-    stage("Quality Gate") {
-      agent {label "window_20_dev"}
-      steps{
-        timeout(time: 1, unit: 'HOURS') {
-          def qg = waitForQualityGate()
-          if (qg.status != 'OK') {
-            error "Pipeline aborted due to quality gate failure: ${qg.status}"
-          }
+    stage('Deploying to Kubernetes') {
+      // agent {label "APS"}
+      steps {
+          // sh "kubectl apply -f deployment.yml"
+          // sh "kubectl apply -f service.yml"
+          echo "test"
         }
       }
-    }
-    stage('Build/push image') {
-      agent {label "window_20_dev"}
-      steps{
-          bat "docker build -t nddung2102/react-app ."
-        }
-      steps{
-        withDockerRegistry(credentialsId: 'dockerhub', url: "") {
-          bat "docker push nddung2102/react-app "
-        }
-      }
-    }
-    // stage('Deploying to Kubernetes') {
-    //   agent {label "APS"}
-    //   steps {
-    //       sh "kubectl apply -f deployment.yml"
-    //       sh "kubectl apply -f service.yml"
-    //     }
-    //   }
   }
 }
