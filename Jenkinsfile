@@ -21,23 +21,31 @@ pipeline {
             }
           }
         }         
-        stage('Build/push image') {
+        stage('Build image') {
+          steps{
+            bat "docker build -t nddung2102/react-app ."
+          }
+        }
+        stage('Push and scan image') {
+          environment {
+            def imageLine = 'nddung2102/react-app:latest'
+          }
           steps{
             withDockerRegistry(credentialsId: 'dockerhub', url: "") {
-              bat "docker build -t nddung2102/react-app ."
               bat "docker push nddung2102/react-app "
             }
+            writeFile file: 'anchore_images', text: imageLine
+            anchore name: 'anchore_images'
           }
         }
       }
     }
-    stage('Scan and deploying image') {
-      agent {label "Dev_MKSmart"}
+    stage('Deploying to Kubernetes') {
+      // agent {label "APS"}
       steps {
-          sh 'echo "docker.io/exampleuser/examplerepo:latest `pwd`/Dockerfile" > anchore_images'
-          anchore name: 'anchore_images'
           // sh "kubectl apply -f deployment.yml"
           // sh "kubectl apply -f service.yml"
+          echo "test"
       }
     }
   }
