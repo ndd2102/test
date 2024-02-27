@@ -39,13 +39,14 @@ pipeline {
           }
         }
       }
+    }
     stage('Deploying to Kubernetes') {
       // agent {label "APS"}
       steps {
           // sh "kubectl apply -f deployment.yml"
           // sh "kubectl apply -f service.yml"
           echo "test"
-        }
       }
+    }
   }
 }
