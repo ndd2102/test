@@ -31,6 +31,7 @@ pipeline {
             withDockerRegistry(credentialsId: 'dockerhub', url: "") {
               bat "docker push nddung2102/react-app "
             }
+            anchore name: 'nddung2102/react-app'
           }
         }
       }
