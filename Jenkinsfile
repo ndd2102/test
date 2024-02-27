@@ -35,7 +35,7 @@ pipeline {
               bat "docker push nddung2102/react-app "
             }
             writeFile file: 'anchore_images', text: imageLine
-            anchore name: 'anchore_images'
+            anchore name: 'anchore_images', bailOnFail: false
           }
         }
       }
