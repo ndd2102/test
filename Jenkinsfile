@@ -3,17 +3,21 @@ pipeline {
   stages {
     stage('SonarQube Analysis') {
       agent {label "window_20_dev"}
-      def scannerHome = tool 'SonarScanner';
-      withSonarQubeEnv() {
-        bat "${scannerHome}/bin/sonar-scanner"
+      steps{
+        def scannerHome = tool 'SonarScanner';
+        withSonarQubeEnv() {
+          bat "${scannerHome}/bin/sonar-scanner"
+          }
         }
       }
     stage("Quality Gate") {
       agent {label "window_20_dev"}
-      timeout(time: 1, unit: 'HOURS') {
-        def qg = waitForQualityGate()
-        if (qg.status != 'OK') {
-          error "Pipeline aborted due to quality gate failure: ${qg.status}"
+      steps{
+        timeout(time: 1, unit: 'HOURS') {
+          def qg = waitForQualityGate()
+          if (qg.status != 'OK') {
+            error "Pipeline aborted due to quality gate failure: ${qg.status}"
+          }
         }
       }
     }
@@ -28,12 +32,12 @@ pipeline {
         }
       }
     }
-    stage('Deploying React.js container to Kubernetes') {
-      agent {label "APS"}
-      steps {
-          sh "kubectl apply -f deployment.yml"
-          sh "kubectl apply -f service.yml"
-        }
-      }
+    // stage('Deploying to Kubernetes') {
+    //   agent {label "APS"}
+    //   steps {
+    //       sh "kubectl apply -f deployment.yml"
+    //       sh "kubectl apply -f service.yml"
+    //     }
+    //   }
   }
 }
