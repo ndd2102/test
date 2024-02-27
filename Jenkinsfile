@@ -5,10 +5,10 @@ pipeline {
       agent {label "window_20_dev"}
       stages{
         stage ('SonarQube Analysis') {
-          steps {
-            environment {
-              def scannerHome = tool 'SonarScanner';
+           environment {
+              def scannerHome = tool 'SonarScanner'
             }
+          steps {
             withSonarQubeEnv('sonarqube') {
               bat "${scannerHome}/bin/sonar-scanner"
             }
