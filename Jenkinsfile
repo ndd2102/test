@@ -32,12 +32,12 @@ pipeline {
       }
     }
     stage('Scan and deploying image') {
-      agent {label "APS"}
+      agent {label "Dev_MKSmart"}
       steps {
           sh 'echo "docker.io/exampleuser/examplerepo:latest `pwd`/Dockerfile" > anchore_images'
           anchore name: 'anchore_images'
-          sh "kubectl apply -f deployment.yml"
-          sh "kubectl apply -f service.yml"
+          // sh "kubectl apply -f deployment.yml"
+          // sh "kubectl apply -f service.yml"
       }
     }
   }
