@@ -15,7 +15,7 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Hello world
+          Hello Nguyễn Đức Dũng
         </a>
       </header>
     </div>
