@@ -1,12 +1,12 @@
-FROM node:19-alpine3.17 AS build
+FROM registry.access.redhat.com/ubi8/nodejs-20 as build
+USER 0
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
 RUN npm run build
-
-FROM nginx:1.25.1-alpine-slim
-RUN rm /etc/nginx/conf.d/default.conf
+USER 1001
+FROM registry.access.redhat.com/ubi8/nginx-122
 COPY --from=build /app/build /usr/share/nginx/html
 COPY --from=build /app/nginx.conf  /etc/nginx/conf.d/default.conf
 CMD ["nginx", "-g", "daemon off;"]
